@@ -13,4 +13,10 @@ class ProductColor extends Model
     {
         return $this->hasMany(ProductColorImage::class);
     }
+
+    public function sizes()
+    {
+        return $this->belongsToMany(Size::class);
+    }
+
 }

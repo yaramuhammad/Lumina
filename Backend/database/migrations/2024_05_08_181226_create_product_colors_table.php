@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('hex_code');
             $table->foreignId('product_id')->constrained()->cascadeOnDelete();
             $table->float('price');
-            $table->integer('quantity');
         });
     }
 

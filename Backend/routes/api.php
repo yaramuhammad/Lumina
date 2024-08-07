@@ -46,7 +46,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/addresses', [AddressController::class, 'addAddress']);
     Route::get('/addresses', [AddressController::class, 'getAddresses']);
     Route::delete('/addresses/{id}', [AddressController::class, 'removeAddress']);
-
     // Profile
     Route::put('/profile/update', [ProfileController::class, 'updateProfile']);
     Route::post('/profile/change-password', [ProfileController::class, 'changePassword']);

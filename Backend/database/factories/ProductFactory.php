@@ -21,7 +21,6 @@ class ProductFactory extends Factory
             'description' => implode(' ', fake()->paragraphs(7)),
             'sub_category_id' => rand(1, 8),
             'brand_id' => rand(1, 5),
-
         ];
     }
 }
