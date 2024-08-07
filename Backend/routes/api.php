@@ -7,6 +7,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SubCategoryController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\AddressController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,7 +15,7 @@ Route::middleware(['auth'])->get('/user', function (Request $request) {
     return $request->user();
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
 
 Route::get('/products', [ProductController::class, 'index']);
 
@@ -38,11 +39,17 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/cart/items/{itemId}', [CartController::class, 'removeItem']);
     Route::delete('/cart', [CartController::class, 'clearCart']);
     //Wishlist
-    Route::post('/wishlist',[WishlistController::class,'AddProductToWishlist']);
-    Route::get('/wishlist',[WishlistController::class,'getWishlist']);
-    Route::delete('/wishlist',[WishlistController::class,'removeFromWishlist']);
+    Route::post('/wishlist', [WishlistController::class, 'AddProductToWishlist']);
+    Route::get('/wishlist', [WishlistController::class, 'getWishlist']);
+    Route::delete('/wishlist', [WishlistController::class, 'removeFromWishlist']);
     //Addresses
     Route::post('/addresses', [AddressController::class, 'addAddress']);
     Route::get('/addresses', [AddressController::class, 'getAddresses']);
     Route::delete('/addresses/{id}', [AddressController::class, 'removeAddress']);
+
+    // Profile
+    Route::put('/profile/update', [ProfileController::class, 'updateProfile']);
+    Route::post('/profile/change-password', [ProfileController::class, 'changePassword']);
+    Route::get('/profile', [ProfileController::class, 'getProfile']);
+
 });
