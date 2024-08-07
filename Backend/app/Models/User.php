@@ -47,9 +47,9 @@ class User extends Authenticatable implements MustVerifyEmail
         ];
     }
 
-    public function cart()
+    public function cartItems()
     {
-        return $this->hasOne(Cart::class);
+        return $this->hasMany(CartItem::class);
     }
 
     public function generateToken(): string
@@ -62,5 +62,10 @@ class User extends Authenticatable implements MustVerifyEmail
     public function wishlist()
     {
         return $this->belongsToMany(Product::class, 'wishlist');
+    }
+
+    public function Addresses()
+    {
+        return $this->hasMany(Address::class);
     }
 }

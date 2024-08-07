@@ -13,7 +13,7 @@ class CartItem extends Model
 
     public function cart()
     {
-        return $this->belongsTo(Cart::class);
+        return $this->belongsTo(User::class);
     }
 
     public function product()
@@ -25,4 +25,5 @@ class CartItem extends Model
     {
         return $this->belongsTo(ProductColor::class);
     }
+
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\CartItem;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class CartController extends Controller
 {
@@ -12,21 +13,24 @@ class CartController extends Controller
     {
         $user = $request->user();
 
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'product_id' => 'required|exists:products,id',
             'quantity' => 'required|integer|min:1',
             'color_id' => 'required|exists:product_colors,id',
         ]);
 
+        if ($validator->fails()) {
+            return response()->json(['message' => $validator->errors()->first()], 422);
+        }
+
         $product = Product::with('colors')->findOrFail($request->product_id);
         $availableColorIds = $product->colors->pluck('id')->toArray();
 
-        if (! in_array($request->color_id, $availableColorIds)) {
+        if (!in_array($request->color_id, $availableColorIds)) {
             return response()->json(['message' => 'Invalid color for the selected product'], 422);
         }
 
-        $cart = $user->cart ?? $user->cart()->create();
-        $cart->items()->create([
+        $user->cartItems()->create([
             'product_id' => $request->product_id,
             'quantity' => $request->quantity,
             'product_color_id' => $request->color_id,
@@ -39,53 +43,30 @@ class CartController extends Controller
     {
         $user = $request->user();
 
-        $cart = $user->cart;
+        $cartItems = $user->cartItems()->with('product', 'product_color.images')->get();
 
-        if (! $cart) {
+        if ($cartItems->isEmpty()) {
             return response()->json(['message' => 'Cart is empty'], 404);
         }
 
-        // Eager load product, color, and images
-        $cartItems = $cart->items()->with('product', 'product_color.images')->get();
-
-        $cartDetails = $cartItems->map(function ($item) {
-            return [
-                'item_id' => $item->id,
-                'quantity' => $item->quantity,
-                'product' => [
-                    'id' => $item->product->id,
-                    'name' => $item->product->name,
-                    'price' => $item->product->price,
-                ],
-                'color' => [
-                    'id' => $item->product_color->id,
-                    'name' => $item->product_color->name,
-                    'images' => $item->product_color->images->pluck('url'),
-                ],
-            ];
-        });
-
-        return response()->json($cartDetails, 200);
+        return response()->json($cartItems, 200);
     }
 
     public function updateItem(Request $request, $itemId)
     {
         $user = $request->user();
 
-        $cartItem = CartItem::where('id', $itemId)->whereHas('cart', function ($query) use ($user) {
-            $query->where('user_id', $user->id);
-        })->firstOrFail();
+        $cartItem = CartItem::where('id', $itemId)
+            ->where('user_id', $user->id)
+            ->firstOrFail();
+
 
         $newQuantity = $cartItem->quantity + $request->quantity;
+        
         if ($newQuantity <= 0) {
             $cartItem->delete();
-            if ($cartItem->cart->items()->count() === 0) {
-                $cartItem->cart->delete();
-            }
         } else {
-            $cartItem->update([
-                'quantity' => $newQuantity,
-            ]);
+            $cartItem->update(['quantity' => $newQuantity]);
         }
 
         return response()->json(['message' => 'Cart item updated']);
@@ -95,15 +76,11 @@ class CartController extends Controller
     {
         $user = request()->user();
 
-        $cartItem = CartItem::where('id', $itemId)->whereHas('cart', function ($query) use ($user) {
-            $query->where('user_id', $user->id);
-        })->firstOrFail();
+        $cartItem = CartItem::where('id', $itemId)
+            ->where('user_id', $user->id)
+            ->firstOrFail();
 
         $cartItem->delete();
-        if ($cartItem->cart->items()->count() === 0) {
-            $cartItem->cart->delete();
-        }
-
         return response()->json(['message' => 'Cart item removed']);
     }
 
@@ -111,11 +88,13 @@ class CartController extends Controller
     {
         $user = $request->user();
 
-        $cart = $user->cart;
+        $cartItems = $user->cartItems;
 
-        if ($cart) {
-            $cart->delete();
-
+        if ($cartItems->isNotEmpty()) {
+            foreach ($cartItems as $cartItem) 
+            {
+                $cartItem->delete();
+            }
             return response()->json(['message' => 'Cart cleared']);
         }
 
