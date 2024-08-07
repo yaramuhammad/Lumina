@@ -5,6 +5,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SubCategoryController;
+use App\Http\Controllers\WishlistController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -34,4 +35,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::patch('/cart/items/{itemId}', [CartController::class, 'updateItem']);
     Route::delete('/cart/items/{itemId}', [CartController::class, 'removeItem']);
     Route::delete('/cart', [CartController::class, 'clearCart']);
+
+    Route::post('/wishlist',[WishlistController::class,'AddProductToWishlist']);
+    Route::get('/wishlist',[WishlistController::class,'getWishlist']);
+    Route::delete('/wishlist',[WishlistController::class,'removeFromWishlist']);
 });

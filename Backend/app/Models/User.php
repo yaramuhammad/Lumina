@@ -58,4 +58,9 @@ class User extends Authenticatable implements MustVerifyEmail
 
         return $this->createToken('api')->plainTextToken;
     }
+
+    public function wishlist()
+    {
+        return $this->belongsToMany(Product::class, 'wishlist');
+    }
 }

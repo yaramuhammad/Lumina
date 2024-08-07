@@ -13,4 +13,10 @@ class Product extends Model
     {
         return $this->hasMany(ProductColor::class);
     }
+
+    public function wishlistedByUsers()
+{
+    return $this->belongsToMany(User::class, 'wishlist');
+}
+
 }
