@@ -10,7 +10,6 @@ use App\Models\ProductColor;
 use App\Models\ProductColorImage;
 use App\Models\SubCategory;
 use App\Models\Size;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use DB;
 use Illuminate\Database\Seeder;
 
