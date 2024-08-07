@@ -16,8 +16,8 @@ return new class extends Migration
             $table->timestamps();
             $table->string('name');
             $table->text('description');
-            $table->float('price');
             $table->foreignId('sub_category_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('brand_id')->constrained()->cascadeOnDelete();
         });
     }
 

@@ -19,6 +19,8 @@ class ProductColorFactory extends Factory
         return [
             'hex_code' => fake()->hexColor,
             'product_id' => rand(1, 50),
+            'price' => fake()->randomFloat(2, 15, 1000),
+            'quantity' => rand(0, 100),
         ];
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Color;
 use App\Models\Product;
@@ -21,6 +22,7 @@ class DatabaseSeeder extends Seeder
         Category::factory(5)->create()->each(function ($category) {
             SubCategory::factory(rand(1, 3))->create(['category_id' => $category->id]);
         });
+        Brand::factory(5)->create();
         Product::factory(50)->create()->each(function ($product) {
             // Create colors for each product
             $colors = ProductColor::factory(rand(1, 5))->create(['product_id' => $product->id]);
