@@ -18,6 +18,7 @@ return new class extends Migration
             $table->text('description');
             $table->foreignId('sub_category_id')->constrained()->cascadeOnDelete();
             $table->foreignId('brand_id')->constrained()->cascadeOnDelete();
+            $table->boolean('availability')->default(true);
         });
     }
 

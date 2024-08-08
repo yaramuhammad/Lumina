@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class ProductColorSize extends Model
 {
     use HasFactory;
+
+    public $timestamps = false;
+    
     protected $table = 'product_color_size';
 
 

@@ -3,6 +3,7 @@
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SubCategoryController;
 use App\Http\Controllers\WishlistController;
@@ -50,5 +51,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/profile/update', [ProfileController::class, 'updateProfile']);
     Route::post('/profile/change-password', [ProfileController::class, 'changePassword']);
     Route::get('/profile', [ProfileController::class, 'getProfile']);
+    //Checkout
+    Route::post('/checkout', [OrderController::class, 'createOrder']);
+    //Orders
+    Route::get('/orders', [OrderController::class, 'index']);
 
 });

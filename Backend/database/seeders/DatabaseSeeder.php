@@ -10,7 +10,9 @@ use App\Models\ProductColor;
 use App\Models\ProductColorImage;
 use App\Models\SubCategory;
 use App\Models\Size;
+use App\Models\User;
 use DB;
+use Hash;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -43,6 +45,8 @@ class DatabaseSeeder extends Seeder
             ['product_color_id' => 1, 'size_id' => 2, 'quantity' => 150],
             ['product_color_id' => 2, 'size_id' => 1, 'quantity' => 200],
         ]);
+
+        User::insert(['email'=>"yaramuhammad72@gmail.com", "password"=>Hash::make("password"), "name"=>"yara"]);
 
 
     }

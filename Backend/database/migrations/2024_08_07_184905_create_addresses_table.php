@@ -22,8 +22,9 @@ return new class extends Migration
             $table->string('apartment');
             $table->string('postal_code');
             $table->string('phone');
-            $table->string('type');
             $table->text('notes')->nullable();
+            $table->enum('type', ['home', 'work', 'other']);
+            $table->timestamps();
         });
     }
 
